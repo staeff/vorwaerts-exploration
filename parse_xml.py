@@ -1,5 +1,7 @@
 from lxml import etree
+from pathlib import Path
 from PIL import Image
+import os
 
 tree = etree.parse('data.xml')
 root = tree.getroot()
@@ -49,19 +51,35 @@ def crop_image(im, anzeige):
     cropped = im.crop(anzeige['coords'])
     cropped.save(f"out/{anzeige['id']}-{anzeige['type']}.jpg")
 
-im = Image.open('scan.jpg')
-textblocks = tree.findall(f'.//{NS}TextBlock')
+if __name__ == '__main__':
+    # Preliminaries
 
-for block in textblocks:
-    anzeige = process_item(block)
-    anzeige['type'] = 'textblock'
-    crop_image(im, anzeige)
-    anzeigen.append(anzeige)
+    # Create out folder if it not exists
+    current_dir = Path.cwd()
+    dirname = current_dir / 'out'
 
-illustrations = tree.findall(f'.//{NS}Illustration')
+    if not dirname.exists():
+        os.mkdir(dirname)
 
-for illu in illustrations:
-    anzeige = process_item(illu)
-    anzeige['type'] = 'illustration'
-    crop_image(im, anzeige)
-    anzeigen.append(anzeige)
+    # hardcode image file
+    im = Image.open('scan.jpg')
+
+    # Extract all textblock images
+    textblocks = tree.findall(f'.//{NS}TextBlock')
+
+    for block in textblocks:
+        anzeige = process_item(block)
+        anzeige['type'] = 'textblock'
+        crop_image(im, anzeige)
+        anzeigen.append(anzeige)
+
+    # Extract all illustration images,
+    # this does not seem to be necessary, the same ads are also
+    # repesented as textblock.
+    illustrations = tree.findall(f'.//{NS}Illustration')
+
+    for illu in illustrations:
+        anzeige = process_item(illu)
+        anzeige['type'] = 'illustration'
+        crop_image(im, anzeige)
+        anzeigen.append(anzeige)
