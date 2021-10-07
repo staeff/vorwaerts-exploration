@@ -1,4 +1,4 @@
-import xml.etree.ElementTree as etree
+from lxml import etree
 from PIL import Image
 
 tree = etree.parse('data.xml')
