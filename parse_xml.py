@@ -43,8 +43,21 @@ def extract_coords(attributes):
 
     return (x0, y0, x1, y1)
 
-def extract_text(xml_node):
-    pass
+def extract_text(xml_node, NS):
+    text = ''
+
+    for lines in xml_node.findall(f'.//{NS}TextLine'):
+        text += '\n'
+        for line in lines.findall(f'.//{NS}String'):
+            # Check if there are no hyphenated words
+            if ('SUBS_CONTENT' not in line.attrib and 'SUBS_TYPE' not in line.attrib):
+                text += f"{line.attrib.get('CONTENT')} "
+            else:
+                if ('HypPart1' in line.attrib.get('SUBS_TYPE')):
+                    text += f"{line.attrib.get('SUBS_CONTENT')} "
+                    if ('HypPart2' in line.attrib.get('SUBS_TYPE')):
+                        pass
+    return text
 
 def crop_image(im, anzeige):
     """Gets coordinates"""
@@ -67,6 +80,13 @@ if __name__ == '__main__':
     # Extract all textblock images
     textblocks = tree.findall(f'.//{NS}TextBlock')
 
+    # Start with 1 because thats aligns with the Id
+    # we get from the xml for the img
+    for i, block in enumerate(textblocks, 1):
+        text = extract_text(block, NS)
+        with open(f'out/{i}.txt', 'w') as outfile:
+            outfile.write(text)
+
     for block in textblocks:
         anzeige = process_item(block)
         anzeige['type'] = 'textblock'
@@ -76,10 +96,10 @@ if __name__ == '__main__':
     # Extract all illustration images,
     # this does not seem to be necessary, the same ads are also
     # repesented as textblock.
-    illustrations = tree.findall(f'.//{NS}Illustration')
+    # illustrations = tree.findall(f'.//{NS}Illustration')
 
-    for illu in illustrations:
-        anzeige = process_item(illu)
-        anzeige['type'] = 'illustration'
-        crop_image(im, anzeige)
-        anzeigen.append(anzeige)
+    # for illu in illustrations:
+    #     anzeige = process_item(illu)
+    #     anzeige['type'] = 'illustration'
+    #     crop_image(im, anzeige)
+    #     anzeigen.append(anzeige)
