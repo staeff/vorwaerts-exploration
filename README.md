@@ -18,3 +18,13 @@ python parse_xml.py
 
 `scan.jpg` and `data.xml` need to correspond, i.e. the right image and the related
 xml file need to be picked from the data set.
+
+## Open tasks
+
+* Allow folder with serveral image and xml files as input
+
+* Map image file name automatically to xml file name. Everything before the file extension is the same.
+
+* Gather important data that is available an needs to be exported
+
+* Output information about the Ad as json
