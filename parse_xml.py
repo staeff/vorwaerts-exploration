@@ -83,23 +83,11 @@ if __name__ == '__main__':
     # Start with 1 because thats aligns with the Id
     # we get from the xml for the img
     for i, block in enumerate(textblocks, 1):
-        text = extract_text(block, NS)
-        with open(f'out/{i}.txt', 'w') as outfile:
-            outfile.write(text)
-
-    for block in textblocks:
         anzeige = process_item(block)
         anzeige['type'] = 'textblock'
         crop_image(im, anzeige)
         anzeigen.append(anzeige)
 
-    # Extract all illustration images,
-    # this does not seem to be necessary, the same ads are also
-    # repesented as textblock.
-    # illustrations = tree.findall(f'.//{NS}Illustration')
-
-    # for illu in illustrations:
-    #     anzeige = process_item(illu)
-    #     anzeige['type'] = 'illustration'
-    #     crop_image(im, anzeige)
-    #     anzeigen.append(anzeige)
+        text = extract_text(block, NS)
+        with open(f'out/{anzeige["id"]}.txt', 'w') as outfile:
+            outfile.write(text)
