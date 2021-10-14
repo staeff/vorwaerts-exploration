@@ -47,7 +47,6 @@ def extract_text(xml_node, NS):
     text = ''
 
     for lines in xml_node.findall(f'.//{NS}TextLine'):
-        text += '\n'
         for line in lines.findall(f'.//{NS}String'):
             # Check if there are no hyphenated words
             if ('SUBS_CONTENT' not in line.attrib and 'SUBS_TYPE' not in line.attrib):
