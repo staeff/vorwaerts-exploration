@@ -46,14 +46,20 @@ def extract_coords(attributes):
 def extract_text(xml_node, NS):
     text = ''
 
+    # Use XPath here to simplify?
     for lines in xml_node.findall(f'.//{NS}TextLine'):
         for line in lines.findall(f'.//{NS}String'):
             # Check if there are no hyphenated words
+            # We dont want to have the CONTENT of nodes, that have the
+            # Attributes SUBS_CONTENT of SUBS_TYPE
             if ('SUBS_CONTENT' not in line.attrib and 'SUBS_TYPE' not in line.attrib):
                 text += f"{line.attrib.get('CONTENT')} "
             else:
+                # If a node has the Attribut SUBS_TYPE we check if
+                # it is HypPart1 and add its SUBCONTENT_VALUE to text/
                 if ('HypPart1' in line.attrib.get('SUBS_TYPE')):
                     text += f"{line.attrib.get('SUBS_CONTENT')} "
+                    # This doesnt do shit!
                     if ('HypPart2' in line.attrib.get('SUBS_TYPE')):
                         pass
     return text
