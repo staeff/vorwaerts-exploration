@@ -34,14 +34,11 @@ def extract_id(identifier):
 if __name__ == '__main__':
     # Preliminaries
     tree = etree.parse('data.xml')
-    root = tree.getroot()
     NS = '{http://www.loc.gov/standards/alto/ns-v2#}'
-
-    anzeigen = ''
-
     # Extract all textblocks
     textblocks = tree.findall(f'.//{NS}TextBlock')
 
+    anzeigen = ''
     # Start with 1 because thats aligns with the Id
     # we get from the xml for the img
     for i, block in enumerate(textblocks, 1):
