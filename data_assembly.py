@@ -38,27 +38,25 @@ def generate_page_data(i, file_id_string):
     page["fields"] = fields
     return page
 
-def process_item(item):
+def extract_coords(item_attrs):
     """Gets a block node, either TextBlock
         or Illustration and returns a
         dictionary with its attributes
     """
-    attributes = item.attrib
     anzeige = {}
-    anzeige['id'] = extract_id(attributes['ID'])
-    anzeige['x'] = int(attributes['HPOS'])
-    anzeige['y'] = int(attributes['VPOS'])
-    anzeige['width'] = int(attributes['WIDTH'])
-    anzeige['height'] = int(attributes['HEIGHT'])
+    anzeige['x'] = int(item_attrs['HPOS'])
+    anzeige['y'] = int(item_attrs['VPOS'])
+    anzeige['width'] = int(item_attrs['WIDTH'])
+    anzeige['height'] = int(item_attrs['HEIGHT'])
     return anzeige
 
-def extract_id(identifier, xml_file):
+def extract_id(block_id_string, file_id_string):
     """Gets something like Page1_Block1
 
     Return last digit
     """
-    text_nr = identifier.replace('Page1_Block', '')
-    return f"{xml_file.stem}-{text_nr}"
+    text_nr = block_id_string.replace('Page1_Block', '')
+    return f"{file_id_string}-{text_nr}"
 
 if __name__ == '__main__':
     cwd = Path('.')
@@ -83,9 +81,8 @@ if __name__ == '__main__':
         # Start with 1 because thats aligns with the Id
         # we get from the xml for the img
         for i, block in enumerate(textblocks, 1):
-            anzeige = process_item(block)
-
-
-        svg_output = svg_shell.format(anzeigen)
-        with open('overlay.svg', 'w') as outfile:
-            outfile.write(svg_output)
+            item_attrs = block.attrib
+            anzeige = extract_coords(item_attrs)
+            block_id_string = item_attrs['ID']
+            file_id_string = xml_file.stem
+            anzeige['id'] = extract_id(block_id_string, file_id_string)
