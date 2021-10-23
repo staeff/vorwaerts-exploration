@@ -33,8 +33,7 @@ def test_extract_coords():
 
 def test_extract_id():
     block_id_string = 'Page1_Block25'
-    file_id_string = 'vw-1891-12-20-298-012'
 
-    result = extract_id(block_id_string, file_id_string)
+    result = extract_id(block_id_string)
 
-    assert result == 'vw-1891-12-20-298-012-25'
+    assert result == '25'

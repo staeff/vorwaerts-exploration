@@ -17,7 +17,6 @@ Sonntagsausgaben des „Vorwärts“ umfassen.
 Die Dateibenennung setzt sich zusammen aus dem Kürzel für die Zeitung (vw),
 dem Datum, der Ausgabennummer sowie der Seitenzahl:
 vw-jjjj-mm-tt-Ausgabennummer-Seitenzahl.
-
 Die Ausgabennummer kann ein- oder zweistellig sein.
 Die Seitenzahl ist dreistellig.
 """
@@ -50,39 +49,46 @@ def extract_coords(item_attrs):
     anzeige['height'] = int(item_attrs['HEIGHT'])
     return anzeige
 
-def extract_id(block_id_string, file_id_string):
-    """Gets something like Page1_Block1
-
-    Return last digit
+def extract_id(block_id_string):
+    """Gets something block id string like Page1_Block1
+    and returns the remaining number when Page1_Block
+    is removed.
     """
-    text_nr = block_id_string.replace('Page1_Block', '')
-    return f"{file_id_string}-{text_nr}"
+    return block_id_string.replace('Page1_Block', '')
+
 
 if __name__ == '__main__':
     cwd = Path('.')
     xml_files = list(cwd.glob('xml/*.xml'))
     fixture = []
+    anzeigen = []
 
     for i, xml_file in enumerate(xml_files):
+        # id string is filename w/o extensions
         file_id_string = xml_file.stem
-        page_data = generate_page_data(i, xml_file)
+
+        # Generate dict with page
+        page_data = generate_page_data(i, file_id_string)
         fixture.append(page_data)
 
-    with open("pages.json", "w") as outfile:
-        json.dump(fixture, outfile)
-
-    for xml_file in enumerate(xml_files):
-        tree = etree.parse(xml_file)
-
-        # Extract all textblocks
+        # Parse data into etree
+        tree = etree.parse(str(xml_file))
+        # Extract all textblocks elements
         textblocks = tree.findall(f'.//{NS}TextBlock')
 
-        anzeigen = ''
-        # Start with 1 because thats aligns with the Id
-        # we get from the xml for the img
-        for i, block in enumerate(textblocks, 1):
+
+        for block in textblocks:
+            # Assign nodes attributes dict to a var
             item_attrs = block.attrib
             anzeige = extract_coords(item_attrs)
             block_id_string = item_attrs['ID']
-            file_id_string = xml_file.stem
             anzeige['id'] = extract_id(block_id_string, file_id_string)
+            anzeigen.append(anzeige)
+
+    # Write pages data to fixture file
+    with open("pages.json", "w") as outfile:
+        json.dump(fixture, outfile)
+
+    # Write advertisement data fo fixture
+    with open("advertisments.json", "w") as outfile:
+        json.dump(anzeigen, outfile)
