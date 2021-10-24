@@ -15,7 +15,7 @@ def test_generate_page_data():
     assert result['pk'] == 10
     assert result['model'] == "vorwaerts.newspaperpage"
     assert len(fields) == 4
-    assert fields['image_name'] == "vw-1891-12-20-298-012.jpg"
+    assert fields['file_id'] == "vw-1891-12-20-298-012"
     assert fields["publish_date"] == "1891-12-20"
     assert fields["issue_number"] == 298
     assert fields["page_number"] == 12

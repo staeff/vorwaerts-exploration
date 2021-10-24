@@ -35,6 +35,8 @@ if __name__ == '__main__':
     # Preliminaries
     tree = etree.parse('data.xml')
     NS = '{http://www.loc.gov/standards/alto/ns-v2#}'
+
+    
     # Extract all textblocks
     textblocks = tree.findall(f'.//{NS}TextBlock')
 

@@ -28,3 +28,8 @@ xml file need to be picked from the data set.
 * Gather important data that is available an needs to be exported
 
 * Output information about the Ad as json
+
+
+## Current Django dump:
+
+[{"model": "vorwaerts.classifiedad", "pk": 1, "fields": {"image_name": "1.jpg", "text": "text", "newspaper_page": 188}}]
