@@ -1,8 +1,17 @@
 import pytest
+from lxml import etree
 from data_assembly import generate_page_dict
 from data_assembly import generate_page_fields
+from data_assembly import get_page_coords
 from data_assembly import extract_coords
 from data_assembly import extract_id
+from data_assembly import NS
+
+XML_DATA = """
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#">
+  <Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="5132" WIDTH="3504"/>
+</alto>
+"""
 
 
 def test_generate_page_dict():
@@ -24,6 +33,14 @@ def test_generate_page_fields():
     assert fields["publish_date"] == "1891-12-20"
     assert fields["issue_number"] == 298
     assert fields["page_number"] == 12
+
+def test_get_page_coords():
+    tree = etree.fromstring(XML_DATA)
+
+    result = get_page_coords(tree)
+    assert len(result) == 2
+    assert result['height'] == "5132"
+    assert result['width'] == "3504"
 
 def test_extract_coords():
     item_attrs = dict(HPOS='100',VPOS='200',WIDTH='22',HEIGHT='12')

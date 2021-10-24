@@ -34,6 +34,13 @@ def generate_page_fields(file_id_string):
     fields["page_number"] = int(page_number)
     return fields
 
+def get_page_coords(tree):
+    page_elem = tree.find(f".//{NS}Page")
+    coords = {}
+    coords['height'] = page_elem.attrib['HEIGHT']
+    coords['width'] = page_elem.attrib['WIDTH']
+    return coords
+
 def extract_coords(item_attrs):
     """Gets a block node, either TextBlock
     or Illustration and returns a
@@ -69,12 +76,13 @@ if __name__ == "__main__":
         file_id_string = xml_file.stem
 
         # Generate dict with page
-        page_data = generate_page_dict(i, file_id_string)
-        fixture.append(page_data)
-
-        # Parse data into etree
-        page = tree.find(f".//{NS}Page")
-        print(page.attrib)
+        page_dict = generate_page_dict(i)
+        fields_dict = generate_page_fields(file_id_string)
+        coords_dict = get_page_coords(tree)
+        # Merge fields and coords dict
+        fields = {**fields_dict, **coords_dict}
+        page_dict['fields'] = fields
+        fixture.append(page_dict)
 
     #     # Extract all textblocks elements
     #     textblocks = tree.findall(f".//{NS}TextBlock")
@@ -88,9 +96,9 @@ if __name__ == "__main__":
     #         anzeige["file_id"] = file_id_string
     #         anzeigen.append(anzeige)
 
-    # # Write pages data to fixture file
-    # with open("pages.json", "w") as outfile:
-    #     json.dump(fixture, outfile)
+    # Write pages data to fixture file
+    with open("pages.json", "w") as outfile:
+        json.dump(fixture, outfile)
 
     # # Write advertisement data fo fixture
     # with open("advertisments.json", "w") as outfile:
