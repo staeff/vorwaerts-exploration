@@ -4,23 +4,6 @@ import json
 
 NS = "{http://www.loc.gov/standards/alto/ns-v2#}"
 
-"""
-[{
-    "model": "vorwaerts.newspaperpage",
-    "pk": 2,
-    "fields": {
-        "image_name": "vw-1891-12-20-298-012.jpg"
-    }
-}, ...]
-
-Sonntagsausgaben des „Vorwärts“ umfassen.
-Die Dateibenennung setzt sich zusammen aus dem Kürzel für die Zeitung (vw),
-dem Datum, der Ausgabennummer sowie der Seitenzahl:
-vw-jjjj-mm-tt-Ausgabennummer-Seitenzahl.
-Die Ausgabennummer kann ein- oder zweistellig sein.
-Die Seitenzahl ist dreistellig.
-"""
-
 def generate_page_dict(i):
     """Generate a dictionary with that represents a minimal page instance"""
     return dict(model="vorwaerts.newspaperpage", pk=i)
