@@ -22,18 +22,19 @@ Die Seitenzahl ist dreistellig.
 """
 
 
-def generate_page_data(i, file_id_string):
-    """Generate a dictionary with that represents a page instance"""
+def generate_page_dict(i):
+    """Generate a dictionary with that represents a minimal page instance"""
+    page = dict(model="vorwaerts.newspaperpage", pk=i)
+    return page
+
+def generate_page_fields(file_id_string):
     _, year, month, day, issue_number, page_number = file_id_string.split("-")
     fields = {}
-    page = dict(model="vorwaerts.newspaperpage", pk=i)
     fields["file_id"] = file_id_string
     fields["publish_date"] = f"{year}-{month}-{day}"
     fields["issue_number"] = int(issue_number)
     fields["page_number"] = int(page_number)
-    page["fields"] = fields
-    return page
-
+    return fields
 
 def extract_coords(item_attrs):
     """Gets a block node, either TextBlock
@@ -63,31 +64,36 @@ if __name__ == "__main__":
     anzeigen = []
 
     for i, xml_file in enumerate(xml_files):
+        # parse XML file into etree
+        tree = etree.parse(str(xml_file))
+
         # id string is filename w/o extensions
         file_id_string = xml_file.stem
 
         # Generate dict with page
-        page_data = generate_page_data(i, file_id_string)
+        page_data = generate_page_dict(i, file_id_string)
         fixture.append(page_data)
 
         # Parse data into etree
-        tree = etree.parse(str(xml_file))
-        # Extract all textblocks elements
-        textblocks = tree.findall(f".//{NS}TextBlock")
+        page = tree.find(f".//{NS}Page")
+        print(page.attrib)
 
-        for block in textblocks:
-            # Assign nodes attributes dict to a var
-            item_attrs = block.attrib
-            anzeige = extract_coords(item_attrs)
-            block_id_string = item_attrs["ID"]
-            anzeige["block_id"] = extract_id(block_id_string)
-            anzeige["file_id"] = file_id_string
-            anzeigen.append(anzeige)
+    #     # Extract all textblocks elements
+    #     textblocks = tree.findall(f".//{NS}TextBlock")
 
-    # Write pages data to fixture file
-    with open("pages.json", "w") as outfile:
-        json.dump(fixture, outfile)
+    #     for block in textblocks:
+    #         # Assign nodes attributes dict to a var
+    #         item_attrs = block.attrib
+    #         anzeige = extract_coords(item_attrs)
+    #         block_id_string = item_attrs["ID"]
+    #         anzeige["block_id"] = extract_id(block_id_string)
+    #         anzeige["file_id"] = file_id_string
+    #         anzeigen.append(anzeige)
 
-    # Write advertisement data fo fixture
-    with open("advertisments.json", "w") as outfile:
-        json.dump(anzeigen, outfile)
+    # # Write pages data to fixture file
+    # with open("pages.json", "w") as outfile:
+    #     json.dump(fixture, outfile)
+
+    # # Write advertisement data fo fixture
+    # with open("advertisments.json", "w") as outfile:
+    #     json.dump(anzeigen, outfile)

@@ -1,19 +1,24 @@
 import pytest
-from data_assembly import generate_page_data
+from data_assembly import generate_page_dict
+from data_assembly import generate_page_fields
 from data_assembly import extract_coords
 from data_assembly import extract_id
 
 
-def test_generate_page_data():
+def test_generate_page_dict():
     i = 10
-    file_id_string = 'vw-1891-12-20-298-012'
 
-    result = generate_page_data(i, file_id_string)
-    fields = result['fields']
+    result = generate_page_dict(i)
 
-    assert len(result) == 3
+    assert len(result) == 2
     assert result['pk'] == 10
     assert result['model'] == "vorwaerts.newspaperpage"
+
+def test_generate_page_fields():
+    file_id_string = 'vw-1891-12-20-298-012'
+
+    fields = generate_page_fields(file_id_string)
+
     assert len(fields) == 4
     assert fields['file_id'] == "vw-1891-12-20-298-012"
     assert fields["publish_date"] == "1891-12-20"
