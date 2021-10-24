@@ -21,11 +21,9 @@ Die Ausgabennummer kann ein- oder zweistellig sein.
 Die Seitenzahl ist dreistellig.
 """
 
-
 def generate_page_dict(i):
     """Generate a dictionary with that represents a minimal page instance"""
-    page = dict(model="vorwaerts.newspaperpage", pk=i)
-    return page
+    return dict(model="vorwaerts.newspaperpage", pk=i)
 
 def generate_page_fields(file_id_string):
     _, year, month, day, issue_number, page_number = file_id_string.split("-")
