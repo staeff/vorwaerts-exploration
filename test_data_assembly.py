@@ -3,7 +3,7 @@ from lxml import etree
 from data_assembly import generate_page_dict
 from data_assembly import generate_page_fields
 from data_assembly import get_page_coords
-from data_assembly import extract_coords
+from data_assembly import get_adv_coords
 from data_assembly import extract_id
 from data_assembly import NS
 
@@ -42,10 +42,10 @@ def test_get_page_coords():
     assert result['height'] == "5132"
     assert result['width'] == "3504"
 
-def test_extract_coords():
+def test_get_adv_coords():
     item_attrs = dict(HPOS='100',VPOS='200',WIDTH='22',HEIGHT='12')
 
-    result = extract_coords(item_attrs)
+    result = get_adv_coords(item_attrs)
 
     assert len(result) == 4
     assert result['x'] == 100

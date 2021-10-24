@@ -24,7 +24,7 @@ def get_page_coords(tree):
     coords['width'] = page_elem.attrib['WIDTH']
     return coords
 
-def extract_coords(item_attrs):
+def get_adv_coords(item_attrs):
     """Gets a block node, either TextBlock
     or Illustration and returns a
     dictionary with its attributes
@@ -67,17 +67,17 @@ if __name__ == "__main__":
         page_dict['fields'] = fields
         fixture.append(page_dict)
 
-    #     # Extract all textblocks elements
-    #     textblocks = tree.findall(f".//{NS}TextBlock")
+        # Extract all textblocks elements
+        textblocks = tree.findall(f".//{NS}TextBlock")
 
-    #     for block in textblocks:
-    #         # Assign nodes attributes dict to a var
-    #         item_attrs = block.attrib
-    #         anzeige = extract_coords(item_attrs)
-    #         block_id_string = item_attrs["ID"]
-    #         anzeige["block_id"] = extract_id(block_id_string)
-    #         anzeige["file_id"] = file_id_string
-    #         anzeigen.append(anzeige)
+        for block in textblocks:
+            # Assign nodes attributes dict to a var
+            item_attrs = block.attrib
+            anzeige = get_adv_coords(item_attrs)
+            block_id_string = item_attrs["ID"]
+            anzeige["block_id"] = extract_id(block_id_string)
+            anzeige["file_id"] = file_id_string
+            anzeigen.append(anzeige)
 
     # Write pages data to fixture file
     with open("pages.json", "w") as outfile:
