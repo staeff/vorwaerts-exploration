@@ -47,7 +47,7 @@ def extract_id(block_id_string):
 
 if __name__ == "__main__":
     cwd = Path(".")
-    xml_files = list(cwd.glob("xml/*.xml"))
+    xml_files = sorted(list(cwd.glob("xml/*.xml")))
     fixture = []
     anzeigen = []
 
