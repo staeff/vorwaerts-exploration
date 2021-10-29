@@ -131,3 +131,10 @@ cython_debug/
 # End of https://www.toptal.com/developers/gitignore/api/python
 
 ads/
+images/
+out/
+
+advertisments.json
+pages.json
+pages_old.json
+overlay.svg
