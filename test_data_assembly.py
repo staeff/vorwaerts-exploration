@@ -7,7 +7,7 @@ from data_assembly import get_adv_coords
 from data_assembly import extract_id
 from data_assembly import NS
 
-XML_DATA = """
+XML_PAGE_COORDS = """
 <alto xmlns="http://www.loc.gov/standards/alto/ns-v2#">
   <Page ID="Page1" PHYSICAL_IMG_NR="1" HEIGHT="5132" WIDTH="3504"/>
 </alto>
@@ -35,7 +35,7 @@ def test_generate_page_fields():
     assert fields["page_number"] == 12
 
 def test_get_page_coords():
-    tree = etree.fromstring(XML_DATA)
+    tree = etree.fromstring(XML_PAGE_COORDS)
 
     result = get_page_coords(tree)
     assert len(result) == 2
