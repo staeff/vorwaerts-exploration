@@ -3,10 +3,6 @@ import shutil
 
 with open('vorwaerts-metadaten.csv') as csvDataFile:
     csvReader = csv.reader(csvDataFile)
-
-csvReader
-with open('vorwaerts-metadaten.csv') as csvDataFile:
-    csvReader = csv.reader(csvDataFile)
     for row in csvReader:
         if csvReader.line_num == 1:
             continue
