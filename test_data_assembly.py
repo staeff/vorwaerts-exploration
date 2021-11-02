@@ -49,7 +49,7 @@ def test_generate_page_fields():
 def test_get_page_coords():
     tree = etree.fromstring(XML_PAGE_COORDS)
 
-    result = get_page_coords(tree)
+    result = get_page_coords(tree, NS)
     assert len(result) == 2
     assert result['height'] == "5132"
     assert result['width'] == "3504"

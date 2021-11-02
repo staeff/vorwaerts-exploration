@@ -17,7 +17,7 @@ def generate_page_fields(file_id_string):
     fields["page_number"] = int(page_number)
     return fields
 
-def get_page_coords(tree):
+def get_page_coords(tree, NS):
     page_elem = tree.find(f".//{NS}Page")
     coords = {}
     coords['height'] = page_elem.attrib['HEIGHT']
@@ -85,7 +85,7 @@ if __name__ == "__main__":
         # Generate dict with page
         page_dict = generate_page_dict(i)
         fields_dict = generate_page_fields(file_id_string)
-        coords_dict = get_page_coords(tree)
+        coords_dict = get_page_coords(tree, NS)
         # Merge fields and coords dict
         fields = {**fields_dict, **coords_dict}
         page_dict['fields'] = fields
