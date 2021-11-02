@@ -4,6 +4,7 @@ from data_assembly import generate_page_dict
 from data_assembly import generate_page_fields
 from data_assembly import get_page_coords
 from data_assembly import get_adv_coords
+from data_assembly import get_adv_text
 from data_assembly import extract_id
 from data_assembly import NS
 
@@ -13,6 +14,17 @@ XML_PAGE_COORDS = """
 </alto>
 """
 
+XML_TextLine_CONTENT = """
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v2#">
+  <TextLine>
+    <String CONTENT="Andreas,"/>
+    <String CONTENT="Alexander" SUBS_TYPE="HypPart1" SUBS_CONTENT="Alexanderstraße" />
+  </TextLine>
+  <TextLine>
+    <String CONTENT="straße" SUBS_TYPE="HypPart2" SUBS_CONTENT="Alexanderstraße" />
+  </TextLine>
+</alto>
+"""
 
 def test_generate_page_dict():
     i = 10
@@ -41,6 +53,12 @@ def test_get_page_coords():
     assert len(result) == 2
     assert result['height'] == "5132"
     assert result['width'] == "3504"
+
+def test_get_adv_text():
+    tree = etree.fromstring(XML_TextLine_CONTENT)
+
+    result = get_adv_text(tree, NS)
+    assert result == 'Andreas, Alexanderstraße'
 
 def test_get_adv_coords():
     item_attrs = dict(HPOS='100',VPOS='200',WIDTH='22',HEIGHT='12')
