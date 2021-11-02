@@ -4,9 +4,9 @@ import json
 
 NS = "{http://www.loc.gov/standards/alto/ns-v2#}"
 
-def generate_page_dict(i):
+def generate_model_dict(i, model):
     """Generate a dictionary with that represents a minimal page instance"""
-    return dict(model="vorwaerts.newspaperpage", pk=i)
+    return dict(model=model, pk=i)
 
 def generate_page_fields(file_id_string):
     _, year, month, day, issue_number, page_number = file_id_string.split("-")
@@ -74,8 +74,9 @@ if __name__ == "__main__":
     xml_files = sorted(list(cwd.glob("xml/*.xml")))
     fixture = []
     anzeigen = []
+    j = 0
 
-    for i, xml_file in enumerate(xml_files):
+    for i, xml_file in enumerate(xml_files, 1):
         # parse XML file into etree
         tree = etree.parse(str(xml_file))
 
@@ -83,7 +84,7 @@ if __name__ == "__main__":
         file_id_string = xml_file.stem
 
         # Generate dict with page
-        page_dict = generate_page_dict(i)
+        page_dict = generate_model_dict(i, 'vorwaerts.newspaperpage')
         fields_dict = generate_page_fields(file_id_string)
         coords_dict = get_page_coords(tree, NS)
         # Merge fields and coords dict
@@ -97,18 +98,21 @@ if __name__ == "__main__":
         for block in textblocks:
             # Assign nodes attributes dict to a var
             item_attrs = block.attrib
-            anzeige = get_adv_coords(item_attrs)
+            j += 1
+            ad_dict = generate_model_dict(j, 'vorwaerts.classifiedad')
+            ad_fields = get_adv_coords(item_attrs)
             block_id_string = item_attrs["ID"]
-            anzeige["block_id"] = extract_id(block_id_string)
-            anzeige["file_id"] = file_id_string
-            anzeige["text"] = get_adv_text(block)
-            anzeige["newspaper_page"] = i
-            anzeigen.append(anzeige)
+            ad_fields["block_id"] = extract_id(block_id_string)
+            ad_fields["file_id"] = file_id_string
+            ad_fields["text"] = get_adv_text(block, NS)
+            ad_fields["newspaper_page"] = i
+            ad_dict['fields'] = ad_fields
+            anzeigen.append(ad_dict)
 
     # Write pages data to fixture file
     with open("pages.json", "w") as outfile:
         json.dump(fixture, outfile)
 
-    # # Write advertisement data fo fixture
-    # with open("advertisments.json", "w") as outfile:
-    #     json.dump(anzeigen, outfile)
+    # Write advertisement data fo fixture
+    with open("advertisments.json", "w") as outfile:
+        json.dump(anzeigen, outfile)

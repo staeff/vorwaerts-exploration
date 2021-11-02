@@ -1,6 +1,6 @@
 import pytest
 from lxml import etree
-from data_assembly import generate_page_dict
+from data_assembly import generate_model_dict
 from data_assembly import generate_page_fields
 from data_assembly import get_page_coords
 from data_assembly import get_adv_coords
@@ -26,14 +26,15 @@ XML_TextLine_CONTENT = """
 </alto>
 """
 
-def test_generate_page_dict():
+def test_generate_model_dict():
     i = 10
+    model = 'app.model'
 
-    result = generate_page_dict(i)
+    result = generate_model_dict(i, model)
 
     assert len(result) == 2
     assert result['pk'] == 10
-    assert result['model'] == "vorwaerts.newspaperpage"
+    assert result['model'] == "app.model"
 
 def test_generate_page_fields():
     file_id_string = 'vw-1891-12-20-298-012'
