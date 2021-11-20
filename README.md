@@ -29,7 +29,6 @@ xml file need to be picked from the data set.
 
 * Output information about the Ad as json
 
+* automate the download an prep of the data (https://download.codingdavinci.de/s/7rTJnf5dP3nKJYp/download)
 
-## Current Django dump:
-
-[{"model": "vorwaerts.classifiedad", "pk": 1, "fields": {"image_name": "1.jpg", "text": "text", "newspaper_page": 188}}]
+## Advertisments fixture
