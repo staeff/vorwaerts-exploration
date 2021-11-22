@@ -10,18 +10,20 @@ def generate_model_dict(i, model):
 
 def generate_page_fields(file_id_string):
     _, year, month, day, issue_number, page_number = file_id_string.split("-")
-    fields = {}
-    fields["file_id"] = file_id_string
-    fields["publish_date"] = f"{year}-{month}-{day}"
-    fields["issue_number"] = int(issue_number)
-    fields["page_number"] = int(page_number)
+    fields = {
+        "file_id": file_id_string,
+        "publish_date": f"{year}-{month}-{day}",
+        "issue_number": int(issue_number),
+        "page_number": int(page_number)
+    }
     return fields
 
 def get_page_coords(tree, NS):
     page_elem = tree.find(f".//{NS}Page")
-    coords = {}
-    coords['height'] = page_elem.attrib['HEIGHT']
-    coords['width'] = page_elem.attrib['WIDTH']
+    coords = {
+        'height': page_elem.attrib['HEIGHT'],
+        'width': page_elem.attrib['WIDTH']
+    }
     return coords
 
 def get_adv_coords(item_attrs):
@@ -29,12 +31,13 @@ def get_adv_coords(item_attrs):
     or Illustration and returns a
     dictionary with its attributes
     """
-    anzeige = {}
-    anzeige["x"] = int(item_attrs["HPOS"])
-    anzeige["y"] = int(item_attrs["VPOS"])
-    anzeige["width"] = int(item_attrs["WIDTH"])
-    anzeige["height"] = int(item_attrs["HEIGHT"])
-    return anzeige
+    adv_coords = {
+        "x": int(item_attrs["HPOS"]),
+        "y": int(item_attrs["VPOS"]),
+        "width": int(item_attrs["WIDTH"]),
+        "height": int(item_attrs["HEIGHT"])
+    }
+    return adv_coords
 
 def get_adv_text(xml_node, NS):
     """copied from alto-tools
@@ -100,8 +103,8 @@ if __name__ == "__main__":
             item_attrs = block.attrib
             j += 1
             ad_dict = generate_model_dict(j, 'vorwaerts.classifiedad')
-            ad_fields = get_adv_coords(item_attrs)
             block_id_string = item_attrs["ID"]
+            ad_fields = get_adv_coords(item_attrs)
             ad_fields["block_id"] = extract_id(block_id_string)
             ad_fields["file_id"] = file_id_string
             ad_fields["text"] = get_adv_text(block, NS)
