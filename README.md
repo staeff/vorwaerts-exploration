@@ -4,9 +4,16 @@
 
 Create a virtual environment, activate it and install the requirements.
 
-```shell
-pip install -r requirements.txt
+```sh
+    pip install -r requirements.txt
 ```
+
+## What does data_assembly.py do
+
+* should we call it pipeline.py?
+
+* data_assembly generates a json file, that can function as a fixture for Django, i.e.
+  it can be loaded into Django easily
 
 ## Usage
 
@@ -29,6 +36,8 @@ xml file need to be picked from the data set.
 
 * Output information about the Ad as json
 
-* automate the download an prep of the data (https://download.codingdavinci.de/s/7rTJnf5dP3nKJYp/download)
+* automate the download an prep of the data (https://download.codingdavinci.de/s/7rTJnf5dP3nKJYp/download) with `make` (first step!)
+
+
 
 ## Advertisments fixture
